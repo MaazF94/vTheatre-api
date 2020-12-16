@@ -9,11 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class MovieInfo {
+public class Movie {
 
     @Id
     @GeneratedValue
-    private Integer movieInfoId;
+    private Integer movieId;
     private String title;
     private String rating;
     private String length;
@@ -21,15 +21,15 @@ public class MovieInfo {
     private Date startDate;
     private Date endDate;
     private String img;
-    @OneToMany(mappedBy = "movieInfoId")
+    @OneToMany(mappedBy = "movieId")
     private List<Showtime> showtime;
 
     public Integer getId() {
-        return movieInfoId;
+        return movieId;
     }
 
     public void setId(Integer id) {
-        this.movieInfoId = id;
+        this.movieId = id;
     }
 
     public String getTitle() {

@@ -2,8 +2,8 @@ package com.vtheatre.controller;
 
 import java.util.List;
 
-import com.vtheatre.data.entity.MovieInfo;
-import com.vtheatre.service.movieService;
+import com.vtheatre.data.entity.Movie;
+import com.vtheatre.service.MovieService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovieController {
 
     @Autowired
-    movieService movieService;
+    MovieService movieService;
 
     @GetMapping(path = "/getMovies")
-    public ResponseEntity<List<MovieInfo>> getMovies() {
-        List<MovieInfo> movie = movieService.lookup();
-        return new ResponseEntity<>(movie, HttpStatus.OK);
+    public ResponseEntity<List<Movie>> getMovies() {
+        List<Movie> movies = movieService.lookup();
+        return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 }
