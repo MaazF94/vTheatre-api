@@ -2,13 +2,13 @@ package com.vtheatre.service;
 
 import java.util.List;
 
-import com.vtheatre.data.entity.MovieInfo;
+import com.vtheatre.data.entity.Movie;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public interface movieService {
+public interface MovieService {
 
-    List<MovieInfo> lookup();
+    List<Movie> lookup();
 
 }

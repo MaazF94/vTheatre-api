@@ -11,8 +11,8 @@ public class Showtime {
     @Id
     @GeneratedValue
     private Integer showtimeId;
-    @JoinColumn(name = "movie_info_id", referencedColumnName = "movie_info_id", nullable = false)
-    private Integer movieInfoId;
+    @JoinColumn(name = "movie_id", referencedColumnName = "movie_id", nullable = false)
+    private Integer movieId;
     private String showtime;
 
     public Integer getShowtimeId() {
@@ -24,11 +24,11 @@ public class Showtime {
     }
 
     public Integer getMovieInfoId() {
-        return movieInfoId;
+        return movieId;
     }
 
     public void setMovieInfoId(Integer movieInfoId) {
-        this.movieInfoId = movieInfoId;
+        this.movieId = movieInfoId;
     }
 
     public String getShowtime() {
@@ -38,5 +38,5 @@ public class Showtime {
     public void setShowtime(String showtime) {
         this.showtime = showtime;
     }
-    
+
 }
