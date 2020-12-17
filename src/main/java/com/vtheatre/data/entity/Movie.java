@@ -22,7 +22,7 @@ public class Movie {
     private Date endDate;
     private String img;
     @OneToMany(mappedBy = "movieId")
-    private List<Showtime> showtime;
+    private List<Showtime> showtimes;
 
     public Integer getId() {
         return movieId;
@@ -88,11 +88,11 @@ public class Movie {
         this.img = img;
     }
 
-    public List<Showtime> getShowtime() {
-        return showtime;
+    public List<Showtime> getShowtimes() {
+        return showtimes;
     }
 
-    public void setShowtime(List<Showtime> showtime) {
-        this.showtime = showtime;
+    public void setShowtimes(List<Showtime> showtimes) {
+        this.showtimes = showtimes;
     }
 }

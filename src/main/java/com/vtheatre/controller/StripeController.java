@@ -1,6 +1,6 @@
 package com.vtheatre.controller;
 
-import com.stripe.model.Charge;
+import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.service.StripeService;
 
@@ -20,11 +20,11 @@ public class StripeController {
     StripeService stripeService;
 
     @PostMapping(value = "/completePayment")
-    public ResponseEntity<String> completePayment(@RequestBody PaymentRequest paymentRequest) {
+    public ResponseEntity<Ticket> completePayment(@RequestBody PaymentRequest paymentRequest) {
 
-        Charge charge = stripeService.Charge(paymentRequest);
+        Ticket ticket = stripeService.Charge(paymentRequest);
 
-        return new ResponseEntity<>(charge.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(ticket, HttpStatus.OK);
     }
 
 }
