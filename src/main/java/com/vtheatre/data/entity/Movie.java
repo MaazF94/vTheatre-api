@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Movie {
@@ -22,6 +23,7 @@ public class Movie {
     private Date endDate;
     private String img;
     @OneToMany(mappedBy = "movieId")
+    @OrderBy("str_to_date(showtime,'%l:%i')")
     private List<Showtime> showtimes;
 
     public Integer getId() {
