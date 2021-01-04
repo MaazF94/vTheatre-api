@@ -25,6 +25,8 @@ public class Movie {
     @OneToMany(mappedBy = "movieId")
     @OrderBy("str_to_date(showtime,'%l:%i')")
     private List<Showtime> showtimes;
+    private String synopsis;
+    private String cast;
 
     public Integer getId() {
         return movieId;
@@ -96,5 +98,29 @@ public class Movie {
 
     public void setShowtimes(List<Showtime> showtimes) {
         this.showtimes = showtimes;
+    }
+
+    public Integer getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public String getCast() {
+        return cast;
+    }
+
+    public void setCast(String cast) {
+        this.cast = cast;
     }
 }
