@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Movie {
@@ -22,7 +23,10 @@ public class Movie {
     private Date endDate;
     private String img;
     @OneToMany(mappedBy = "movieId")
-    private List<Showtime> showtime;
+    @OrderBy("str_to_date(showtime,'%l:%i')")
+    private List<Showtime> showtimes;
+    private String synopsis;
+    private String cast;
 
     public Integer getId() {
         return movieId;
@@ -88,11 +92,35 @@ public class Movie {
         this.img = img;
     }
 
-    public List<Showtime> getShowtime() {
-        return showtime;
+    public List<Showtime> getShowtimes() {
+        return showtimes;
     }
 
-    public void setShowtime(List<Showtime> showtime) {
-        this.showtime = showtime;
+    public void setShowtimes(List<Showtime> showtimes) {
+        this.showtimes = showtimes;
+    }
+
+    public Integer getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public String getCast() {
+        return cast;
+    }
+
+    public void setCast(String cast) {
+        this.cast = cast;
     }
 }

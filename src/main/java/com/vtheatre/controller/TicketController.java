@@ -1,8 +1,6 @@
 package com.vtheatre.controller;
 
-import com.vtheatre.data.entity.Ticket;
-import com.vtheatre.data.model.PaymentRequest;
-import com.vtheatre.service.StripeService;
+import com.vtheatre.service.TicketService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,17 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/vtheatre/v1")
-public class StripeController {
+public class TicketController {
 
     @Autowired
-    StripeService stripeService;
+    TicketService ticketService;
 
-    @PostMapping(value = "/completePayment")
-    public ResponseEntity<Ticket> completePayment(@RequestBody PaymentRequest paymentRequest) {
+    @PostMapping(value = "/verifyConfirmationCode")
+    public ResponseEntity<Boolean> completePayment(@RequestBody String confirmationCode) {
 
-        Ticket ticket = stripeService.Charge(paymentRequest);
+        boolean exists = ticketService.verifyConfirmationCode(confirmationCode);
 
-        return new ResponseEntity<>(ticket, HttpStatus.OK);
+        return new ResponseEntity<>(exists, HttpStatus.OK);
     }
-
+    
 }
