@@ -10,5 +10,7 @@ import org.springframework.stereotype.Service;
 public interface TicketService {
 
     Ticket createTicket(String confirmationCode, Charge charge, Showtime showtime);
+
+    boolean verifyConfirmationCode(String confirmationCode);
     
 }
