@@ -1,7 +1,7 @@
 package com.vtheatre.service;
 
 import com.stripe.model.Charge;
-import com.vtheatre.common.TicketStatusConstants;
+import com.vtheatre.common.TicketConstants;
 import com.vtheatre.data.entity.Showtime;
 import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.repository.TicketRepository;
@@ -21,9 +21,12 @@ public class TicketServiceImpl implements TicketService {
         ticket.setChargeId(charge.getId());
         ticket.setConfirmationCode(confirmationCode);
         ticket.setShowtimeId(showtime.getShowtimeId());
-        ticket.setStatus(TicketStatusConstants.ACTIVE);
+        ticket.setStatus(TicketConstants.ACTIVE);
         return ticketRepository.save(ticket);
     }
 
-    
+    @Override
+    public boolean verifyConfirmationCode(String confirmationCode) {
+        return ticketRepository.existsByConfirmationCode(confirmationCode);
+    }
 }
