@@ -6,7 +6,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -18,12 +17,6 @@ public class EmailConfig {
 
     @Autowired
     private JavaMailSender sender;
-
-    @Value("${spring.mail.username}")
-	private String username;
-
-	@Value("${spring.mail.password}")
-	private String password;
 
     // Send Email with HTML body
     public void sendMailWithPlainHtmlBody(String from, String to, String subject, String body)

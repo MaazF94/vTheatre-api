@@ -5,11 +5,11 @@ import com.vtheatre.common.TicketConstants;
 public class TicketUtils {
 
     public static String confirmationCodeGenerator(String chargeId) {
-        int codeLength = chargeId.length() - 7;
+        int codeLength = chargeId.length() - TicketConstants.CODE_LENGTH;
         StringBuilder sb = new StringBuilder(TicketConstants.CODE_LENGTH);
 
         for (int i = chargeId.length(); i > codeLength; i--)
-            sb.append(chargeId.charAt(i-1));
+            sb.append(chargeId.charAt(i - 1));
         return sb.toString().toUpperCase();
     }
 }

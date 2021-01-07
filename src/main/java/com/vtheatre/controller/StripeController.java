@@ -1,7 +1,7 @@
 package com.vtheatre.controller;
 
-import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.data.model.PaymentRequest;
+import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.service.StripeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ public class StripeController {
     StripeService stripeService;
 
     @PostMapping(value = "/completePayment")
-    public ResponseEntity<Ticket> completePayment(@RequestBody PaymentRequest paymentRequest) {
+    public ResponseEntity<PaymentResponse> completePayment(@RequestBody PaymentRequest paymentRequest) {
 
-        Ticket ticket = stripeService.Charge(paymentRequest);
+        PaymentResponse paymentResponse = stripeService.charge(paymentRequest);
 
-        return new ResponseEntity<>(ticket, HttpStatus.OK);
+        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
 
 }
