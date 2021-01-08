@@ -2,8 +2,8 @@ package com.vtheatre.service;
 
 import com.stripe.model.Charge;
 import com.vtheatre.common.TicketConstants;
-import com.vtheatre.data.entity.Showtime;
 import com.vtheatre.data.entity.Ticket;
+import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.repository.TicketRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,12 @@ public class TicketServiceImpl implements TicketService {
     private TicketRepository ticketRepository;
 
     @Override
-    public Ticket createTicket(String confirmationCode, Charge charge, Showtime showtime) {
+    public Ticket createTicket(String confirmationCode, Charge charge, PaymentRequest paymentRequest) {
         Ticket ticket = new Ticket();
+
         ticket.setChargeId(charge.getId());
         ticket.setConfirmationCode(confirmationCode);
-        ticket.setShowtimeId(showtime.getShowtimeId());
+        ticket.setShowtimeId(paymentRequest.getShowtime().getShowtimeId());
         ticket.setStatus(TicketConstants.ACTIVE);
         return ticketRepository.save(ticket);
     }

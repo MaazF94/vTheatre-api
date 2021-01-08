@@ -6,7 +6,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -18,12 +17,6 @@ public class EmailConfig {
 
     @Autowired
     private JavaMailSender sender;
-
-    @Value("${spring.mail.username}")
-	private String username;
-
-	@Value("${spring.mail.password}")
-	private String password;
 
     // Send Email with HTML body
     public void sendMailWithPlainHtmlBody(String from, String to, String subject, String body)
@@ -41,18 +34,23 @@ public class EmailConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
+        Properties mailProperties = new Properties();
+        
+		mailProperties.put("mail.smtp.auth", true);
+		mailProperties.put("mail.smtp.starttls.enable", true);
+		mailProperties.put("mail.smtp.starttls.required", true);
+		mailProperties.put("mail.smtp.socketFactory.port", 587);
+		mailProperties.put("mail.smtp.debug", true);
+		mailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        mailProperties.put("mail.smtp.socketFactory.fallback", true);
+        
+		mailSender.setJavaMailProperties(mailProperties);
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+        mailSender.setProtocol("smtp");
         mailSender.setUsername("vtheatreofficial@gmail.com");
         mailSender.setPassword("vTheatre123!");
 
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
         return mailSender;
 
     }

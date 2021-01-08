@@ -6,16 +6,20 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.param.ChargeCreateParams;
-import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.data.model.PaymentRequest;
+import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.util.TicketUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StripeServiceImpl implements StripeService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${stripe.apiKey}")
     private String apiKey;
@@ -32,30 +36,47 @@ public class StripeServiceImpl implements StripeService {
     }
 
     @Override
-    public Ticket Charge(PaymentRequest paymentRequest) {
-        Ticket ticket = null;
+    public PaymentResponse charge(PaymentRequest paymentRequest) {
+        logger.info("Inside StripeService with {}", paymentRequest);
+
+        PaymentResponse paymentResponse = new PaymentResponse();
+        boolean isChargeSuccesful = false;
+        boolean isEmailSuccessful = false;
+        String confirmationCode = "";
 
         ChargeCreateParams params = ChargeCreateParams.builder().setAmount(paymentRequest.getAmount() * 100L)
                 .setCurrency(paymentRequest.getCurrency()).setDescription(paymentRequest.getDescription())
                 .setSource(paymentRequest.getTokenId()).setReceiptEmail(paymentRequest.getEmailAddress()).build();
 
         try {
+
             Charge charge = Charge.create(params);
+            logger.info("Successful charge with {}", charge);
+
             if (charge.getCaptured()) {
+                // Able to capture the charge
+                isChargeSuccesful = true;
+
                 // Generate a ticket confirmation code
-                String confirmationCode = TicketUtils.confirmationCodeGenerator(charge.getId());
+                confirmationCode = TicketUtils.confirmationCodeGenerator(charge.getId());
+
                 // Save the ticket
-                ticket = ticketService.createTicket(confirmationCode, charge, paymentRequest.getShowtime());
+                ticketService.createTicket(confirmationCode, charge, paymentRequest);
+
                 // Email the user with showtime and confirmation details
-                emailService.sendConfirmationCode(paymentRequest.getEmailAddress(), confirmationCode,
-                        paymentRequest.getMovie(), paymentRequest.getShowtime().getShowtime(),
-                        paymentRequest.getChosenMovieDate());
+                isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest, confirmationCode);
+                logger.info("Successful email with {}", isEmailSuccessful);
             }
         } catch (StripeException e) {
             e.printStackTrace();
         }
 
-        return ticket;
+        paymentResponse.setChargeSuccesful(isChargeSuccesful);
+        paymentResponse.setEmailSuccessful(isEmailSuccessful);
+        paymentResponse.setEmailAddress(paymentRequest.getEmailAddress());
+        paymentResponse.setConfirmationCode(confirmationCode);
+
+        return paymentResponse;
     }
 
 }
