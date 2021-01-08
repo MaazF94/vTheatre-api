@@ -5,12 +5,16 @@ import com.vtheatre.common.EmailConfig;
 import com.vtheatre.common.EmailConstants;
 import com.vtheatre.data.model.PaymentRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmailServiceImpl implements EmailService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private EmailConfig emailConfig;
@@ -19,6 +23,8 @@ public class EmailServiceImpl implements EmailService {
     private String fromEmail;
 
     public boolean sendConfirmationCode(PaymentRequest paymentRequest, String confirmationCode) {
+        logger.info("Inside EmailService with request {} and confirmation code {}", paymentRequest, confirmationCode);
+
         StringBuilder body = new StringBuilder();
         boolean result = false;
 
@@ -39,8 +45,10 @@ public class EmailServiceImpl implements EmailService {
             emailConfig.sendMailWithPlainHtmlBody(fromEmail, paymentRequest.getEmailAddress(),
                     EmailConstants.PURCHASE_CONFIRMATION_SUBJ, body.toString());
             result = true;
+            logger.info("Successfully sent email with result {}", result);
         } catch (MessagingException e) {
             e.printStackTrace();
+            logger.error("Error sending email with result {}", result, e);
         }
         return result;
     }

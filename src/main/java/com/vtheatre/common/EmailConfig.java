@@ -34,18 +34,23 @@ public class EmailConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
+        Properties mailProperties = new Properties();
+        
+		mailProperties.put("mail.smtp.auth", true);
+		mailProperties.put("mail.smtp.starttls.enable", true);
+		mailProperties.put("mail.smtp.starttls.required", true);
+		mailProperties.put("mail.smtp.socketFactory.port", 587);
+		mailProperties.put("mail.smtp.debug", true);
+		mailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        mailProperties.put("mail.smtp.socketFactory.fallback", true);
+        
+		mailSender.setJavaMailProperties(mailProperties);
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+        mailSender.setProtocol("smtp");
         mailSender.setUsername("vtheatreofficial@gmail.com");
         mailSender.setPassword("vTheatre123!");
 
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
         return mailSender;
 
     }

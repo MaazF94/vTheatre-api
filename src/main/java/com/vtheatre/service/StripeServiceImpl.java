@@ -10,12 +10,16 @@ import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.util.TicketUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StripeServiceImpl implements StripeService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${stripe.apiKey}")
     private String apiKey;
@@ -33,6 +37,8 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public PaymentResponse charge(PaymentRequest paymentRequest) {
+        logger.info("Inside StripeService with {}", paymentRequest);
+
         PaymentResponse paymentResponse = new PaymentResponse();
         boolean isChargeSuccesful = false;
         boolean isEmailSuccessful = false;
@@ -45,6 +51,7 @@ public class StripeServiceImpl implements StripeService {
         try {
 
             Charge charge = Charge.create(params);
+            logger.info("Successful charge with {}", charge);
 
             if (charge.getCaptured()) {
                 // Able to capture the charge
@@ -58,6 +65,7 @@ public class StripeServiceImpl implements StripeService {
 
                 // Email the user with showtime and confirmation details
                 isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest, confirmationCode);
+                logger.info("Successful email with {}", isEmailSuccessful);
             }
         } catch (StripeException e) {
             e.printStackTrace();
