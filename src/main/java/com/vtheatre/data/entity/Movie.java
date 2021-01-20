@@ -23,7 +23,7 @@ public class Movie {
     private Date endDate;
     private String img;
     @OneToMany(mappedBy = "movieId")
-    @OrderBy("str_to_date(showtime,'%l:%i')")
+    @OrderBy("str_to_date(showtime,'%l:%i %p')")
     private List<Showtime> showtimes;
     private String synopsis;
     private String cast;
