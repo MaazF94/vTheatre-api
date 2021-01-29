@@ -3,12 +3,16 @@ package com.vtheatre.controller;
 import java.util.List;
 
 import com.vtheatre.data.entity.Movie;
+import com.vtheatre.data.entity.VideoTimeWatched;
+import com.vtheatre.data.model.VideoTimeWatchedRequest;
 import com.vtheatre.service.MovieService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +27,11 @@ public class MovieController {
     public ResponseEntity<List<Movie>> getMovies() {
         List<Movie> movies = movieService.lookup();
         return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/recordVideoTimeWatched")
+    public ResponseEntity<VideoTimeWatched> recordTimeVideoWatched(@RequestBody VideoTimeWatchedRequest videoTimeWatchedRequest) {
+        VideoTimeWatched result = movieService.recordTimeVideoWatched(videoTimeWatchedRequest);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

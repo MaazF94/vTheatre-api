@@ -44,7 +44,7 @@ public class StripeServiceImpl implements StripeService {
         boolean isEmailSuccessful = false;
         String confirmationCode = "";
 
-        ChargeCreateParams params = ChargeCreateParams.builder().setAmount(paymentRequest.getAmount() * 100L)
+        ChargeCreateParams params = ChargeCreateParams.builder().setAmount(paymentRequest.getMovie().getTicketPrice() * 100L)
                 .setCurrency(paymentRequest.getCurrency()).setDescription(paymentRequest.getDescription())
                 .setSource(paymentRequest.getTokenId()).setReceiptEmail(paymentRequest.getEmailAddress()).build();
 
@@ -65,10 +65,10 @@ public class StripeServiceImpl implements StripeService {
 
                 // Email the user with showtime and confirmation details
                 isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest, confirmationCode);
-                logger.info("Successful email with {}", isEmailSuccessful);
             }
         } catch (StripeException e) {
             e.printStackTrace();
+            logger.info("Error with stripe charge to {} for {}", paymentRequest.getEmailAddress(), paymentRequest.getChosenMovieDate() + " " + paymentRequest.getShowtime().getShowtime());
         }
 
         paymentResponse.setChargeSuccesful(isChargeSuccesful);

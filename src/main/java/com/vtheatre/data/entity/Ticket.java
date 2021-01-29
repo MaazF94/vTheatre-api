@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 
 @Entity
 public class Ticket {
@@ -12,7 +11,6 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ticketId;
-    @JoinColumn(name = "showtimeId", referencedColumnName = "showtimeId", table = "showtime", nullable = false)
     private Integer showtimeId;
     private String chargeId;
     private String confirmationCode;

@@ -27,6 +27,7 @@ public class Movie {
     private List<Showtime> showtimes;
     private String synopsis;
     private String cast;
+    private Long ticketPrice;
 
     public Integer getId() {
         return movieId;
@@ -122,5 +123,13 @@ public class Movie {
 
     public void setCast(String cast) {
         this.cast = cast;
+    }
+
+    public Long getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(Long ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 }
