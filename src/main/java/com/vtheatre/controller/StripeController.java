@@ -25,9 +25,11 @@ public class StripeController {
 
     @PostMapping(value = "/completePayment")
     public ResponseEntity<PaymentResponse> completePayment(@RequestBody PaymentRequest paymentRequest) {
-        logger.info("Inside StripeController with {}", paymentRequest);
-        
+        logger.info("Received payment request");
+
         PaymentResponse paymentResponse = stripeService.charge(paymentRequest);
+
+        logger.info("Sending payment response");
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }

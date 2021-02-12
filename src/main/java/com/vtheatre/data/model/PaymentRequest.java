@@ -6,7 +6,6 @@ import com.vtheatre.data.entity.Showtime;
 public class PaymentRequest {
 
     private String tokenId;
-    private Long amount;
     private String description;
     private String currency;
     private String emailAddress;
@@ -20,14 +19,6 @@ public class PaymentRequest {
 
     public void setTokenId(String tokenId) {
         this.tokenId = tokenId;
-    }
-
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
     }
 
     public String getDescription() {

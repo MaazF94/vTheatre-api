@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     boolean existsByConfirmationCode(String confirmationCode);
-    
+
 }

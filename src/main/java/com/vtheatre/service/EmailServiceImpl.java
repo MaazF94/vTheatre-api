@@ -45,10 +45,10 @@ public class EmailServiceImpl implements EmailService {
             emailConfig.sendMailWithPlainHtmlBody(fromEmail, paymentRequest.getEmailAddress(),
                     EmailConstants.PURCHASE_CONFIRMATION_SUBJ, body.toString());
             result = true;
-            logger.info("Successfully sent email with result {}", result);
+            logger.info("Successfully sent email");
         } catch (MessagingException e) {
             e.printStackTrace();
-            logger.error("Error sending email with result {}", result, e);
+            logger.error("Error sending email to {} with error {}", paymentRequest.getEmailAddress(), e.getMessage());
         }
         return result;
     }

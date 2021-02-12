@@ -10,24 +10,24 @@ public class Showtime {
 
     @Id
     @GeneratedValue
-    private Integer showtimeId;
+    private Long showtimeId;
     @JoinColumn(name = "movie_id", referencedColumnName = "movie_id", nullable = false)
-    private Integer movieId;
+    private Long movieId;
     private String showtime;
 
-    public Integer getShowtimeId() {
+    public Long getShowtimeId() {
         return showtimeId;
     }
 
-    public void setShowtimeId(Integer showtimeId) {
+    public void setShowtimeId(Long showtimeId) {
         this.showtimeId = showtimeId;
     }
 
-    public Integer getMovieInfoId() {
+    public Long getMovieInfoId() {
         return movieId;
     }
 
-    public void setMovieInfoId(Integer movieInfoId) {
+    public void setMovieInfoId(Long movieInfoId) {
         this.movieId = movieInfoId;
     }
 
