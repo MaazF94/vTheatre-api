@@ -5,7 +5,7 @@ public class VideoTimeWatchedRequest {
     private Long hours;
     private Long minutes;
     private Long seconds;
-    private Integer movieId;
+    private Long movieId;
 
     public Long getHours() {
         return hours;
@@ -31,11 +31,11 @@ public class VideoTimeWatchedRequest {
         this.seconds = seconds;
     }
 
-    public Integer getMovieId() {
+    public Long getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(Integer movieId) {
+    public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
 

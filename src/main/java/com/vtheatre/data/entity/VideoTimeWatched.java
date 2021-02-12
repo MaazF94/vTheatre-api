@@ -10,11 +10,11 @@ public class VideoTimeWatched {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer videoTimeWatchedId;
+    private Long videoTimeWatchedId;
     private Long hours;
     private Long minutes;
     private Long seconds;
-    private Integer movieId;
+    private Long movieId;
 
     public Long getHours() {
         return hours;
@@ -40,19 +40,19 @@ public class VideoTimeWatched {
         this.seconds = seconds;
     }
 
-    public Integer getVideoTimeWatchedId() {
+    public Long getVideoTimeWatchedId() {
         return videoTimeWatchedId;
     }
 
-    public void setVideoTimeWatchedId(Integer videoTimeWatchedId) {
+    public void setVideoTimeWatchedId(Long videoTimeWatchedId) {
         this.videoTimeWatchedId = videoTimeWatchedId;
     }
 
-    public Integer getMovieId() {
+    public Long getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(Integer movieId) {
+    public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
 

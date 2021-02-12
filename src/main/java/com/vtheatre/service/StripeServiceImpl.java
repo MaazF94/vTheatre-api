@@ -37,21 +37,22 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public PaymentResponse charge(PaymentRequest paymentRequest) {
-        logger.info("Inside StripeService with {}", paymentRequest);
+        logger.info("Before creating charge");
 
         PaymentResponse paymentResponse = new PaymentResponse();
         boolean isChargeSuccesful = false;
         boolean isEmailSuccessful = false;
         String confirmationCode = "";
 
-        ChargeCreateParams params = ChargeCreateParams.builder().setAmount(paymentRequest.getMovie().getTicketPrice() * 100L)
-                .setCurrency(paymentRequest.getCurrency()).setDescription(paymentRequest.getDescription())
-                .setSource(paymentRequest.getTokenId()).setReceiptEmail(paymentRequest.getEmailAddress()).build();
+        ChargeCreateParams params = ChargeCreateParams.builder()
+                .setAmount(paymentRequest.getMovie().getTicketPrice() * 100L).setCurrency(paymentRequest.getCurrency())
+                .setDescription(paymentRequest.getDescription()).setSource(paymentRequest.getTokenId())
+                .setReceiptEmail(paymentRequest.getEmailAddress()).build();
 
         try {
 
             Charge charge = Charge.create(params);
-            logger.info("Successful charge with {}", charge);
+            logger.info("Successful charge with Id {}", charge.getId());
 
             if (charge.getCaptured()) {
                 // Able to capture the charge
@@ -59,16 +60,20 @@ public class StripeServiceImpl implements StripeService {
 
                 // Generate a ticket confirmation code
                 confirmationCode = TicketUtils.confirmationCodeGenerator(charge.getId());
+                logger.info("Confirmation code created {}", confirmationCode);
 
                 // Save the ticket
                 ticketService.createTicket(confirmationCode, charge, paymentRequest);
+                logger.info("Ticket created");
 
                 // Email the user with showtime and confirmation details
                 isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest, confirmationCode);
             }
         } catch (StripeException e) {
             e.printStackTrace();
-            logger.info("Error with stripe charge to {} for {}", paymentRequest.getEmailAddress(), paymentRequest.getChosenMovieDate() + " " + paymentRequest.getShowtime().getShowtime());
+            logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(), paymentRequest.getEmailAddress(),
+                    paymentRequest.getMovie().getTitle(),
+                    paymentRequest.getChosenMovieDate() + " " + paymentRequest.getShowtime().getShowtime());
         }
 
         paymentResponse.setChargeSuccesful(isChargeSuccesful);

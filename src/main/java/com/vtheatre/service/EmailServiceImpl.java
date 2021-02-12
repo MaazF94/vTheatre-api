@@ -48,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
             logger.info("Successfully sent email");
         } catch (MessagingException e) {
             e.printStackTrace();
-            logger.error("Error sending email to {}", paymentRequest.getEmailAddress(), e);
+            logger.error("Error sending email to {} with error {}", paymentRequest.getEmailAddress(), e.getMessage());
         }
         return result;
     }

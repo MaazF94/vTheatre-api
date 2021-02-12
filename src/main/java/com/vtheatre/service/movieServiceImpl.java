@@ -1,6 +1,7 @@
 package com.vtheatre.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.vtheatre.data.entity.Movie;
 import com.vtheatre.data.entity.VideoTimeWatched;
@@ -34,6 +35,12 @@ public class MovieServiceImpl implements MovieService {
 		videoTimeWatched.setMovieId(timeVideoWatchedRequest.getMovieId());
 
 		return videoTimeWatchedRepository.save(videoTimeWatched);
+	}
+
+	@Override
+	public Movie getMovieByMovieId(Long id) {
+		Optional<Movie> movie = movieRepository.findById(id);
+		return movie.get();
 	}
 
 }

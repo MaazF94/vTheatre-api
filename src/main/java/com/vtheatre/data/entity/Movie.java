@@ -14,7 +14,7 @@ public class Movie {
 
     @Id
     @GeneratedValue
-    private Integer movieId;
+    private Long movieId;
     private String title;
     private String rating;
     private String length;
@@ -28,13 +28,14 @@ public class Movie {
     private String synopsis;
     private String cast;
     private Long ticketPrice;
+    private String vid;
 
-    public Integer getId() {
+    public Long getMovieId() {
         return movieId;
     }
 
-    public void setId(Integer id) {
-        this.movieId = id;
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
     public String getTitle() {
@@ -101,14 +102,6 @@ public class Movie {
         this.showtimes = showtimes;
     }
 
-    public Integer getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(Integer movieId) {
-        this.movieId = movieId;
-    }
-
     public String getSynopsis() {
         return synopsis;
     }
@@ -131,5 +124,13 @@ public class Movie {
 
     public void setTicketPrice(Long ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
     }
 }

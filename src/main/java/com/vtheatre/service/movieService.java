@@ -1,6 +1,7 @@
 package com.vtheatre.service;
 
 import java.util.List;
+
 import com.vtheatre.data.entity.Movie;
 import com.vtheatre.data.entity.VideoTimeWatched;
 import com.vtheatre.data.model.VideoTimeWatchedRequest;
@@ -12,6 +13,8 @@ public interface MovieService {
 
     List<Movie> lookup();
 
-	VideoTimeWatched recordTimeVideoWatched(VideoTimeWatchedRequest videoTimeWatched);
+    VideoTimeWatched recordTimeVideoWatched(VideoTimeWatchedRequest videoTimeWatched);
+
+    Movie getMovieByMovieId(Long id);
 
 }

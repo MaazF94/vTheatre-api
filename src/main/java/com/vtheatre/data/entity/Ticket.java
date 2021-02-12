@@ -10,25 +10,25 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ticketId;
-    private Integer showtimeId;
+    private Long ticketId;
+    private Long showtimeId;
     private String chargeId;
     private String confirmationCode;
     private String status;
 
-    public Integer getTicketId() {
+    public Long getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(Integer ticketId) {
+    public void setTicketId(Long ticketId) {
         this.ticketId = ticketId;
     }
 
-    public Integer getShowtimeId() {
+    public Long getShowtimeId() {
         return showtimeId;
     }
 
-    public void setShowtimeId(Integer showtimeId) {
+    public void setShowtimeId(Long showtimeId) {
         this.showtimeId = showtimeId;
     }
 

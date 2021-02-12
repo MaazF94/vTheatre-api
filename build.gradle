@@ -23,6 +23,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.60'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.951'
 	implementation "com.stripe:stripe-java:20.32.0"
 	runtimeOnly 'mysql:mysql-connector-java'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
