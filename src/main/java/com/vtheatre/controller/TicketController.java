@@ -1,5 +1,8 @@
 package com.vtheatre.controller;
 
+import com.vtheatre.data.model.VerifyConfCodeResponse;
+import com.vtheatre.data.model.TicketStatusRequest;
+import com.vtheatre.data.model.VerifyConfCodeRequest;
 import com.vtheatre.service.TicketService;
 
 import org.slf4j.Logger;
@@ -22,14 +25,23 @@ public class TicketController {
     TicketService ticketService;
 
     @PostMapping(value = "/verifyConfirmationCode")
-    public ResponseEntity<Boolean> verifyConfirmationCode(@RequestBody String confirmationCode) {
-        logger.info("Verifying confirmation code {}", confirmationCode);
+    public ResponseEntity<VerifyConfCodeResponse> verifyConfirmationCode(@RequestBody VerifyConfCodeRequest verifyConfCodeRequest) {
+        logger.info("Verifying confirmation code {}", verifyConfCodeRequest.getConfirmationCode());
 
-        boolean exists = ticketService.verifyConfirmationCode(confirmationCode);
+        VerifyConfCodeResponse ticketResponse = ticketService.verifyConfirmationCode(verifyConfCodeRequest);
 
-        logger.info("Confirmation code verified with result {}", exists);
+        logger.info("Does confirmation code exist: {}", ticketResponse.isExists());
 
-        return new ResponseEntity<>(exists, HttpStatus.OK);
+        return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
     }
-    
+
+    @PostMapping(value = "/updateTicketStatus")
+    public ResponseEntity<Boolean> updateTicketStatus(@RequestBody TicketStatusRequest ticketStatusRequest) {
+        logger.info("Updating ticket status");
+
+        boolean result = ticketService.updateTicketStatus(ticketStatusRequest);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

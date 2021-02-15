@@ -11,7 +11,8 @@ public class PaymentRequest {
     private String emailAddress;
     private Showtime showtime;
     private Movie movie;
-    private String chosenMovieDate;
+    private String emailFormattedDate;
+    private String ticketFormattedDate;
 
     public String getTokenId() {
         return tokenId;
@@ -61,12 +62,20 @@ public class PaymentRequest {
         this.movie = movie;
     }
 
-    public String getChosenMovieDate() {
-        return chosenMovieDate;
+    public String getEmailFormattedDate() {
+        return emailFormattedDate;
     }
 
-    public void setChosenMovieDate(String chosenMovieDate) {
-        this.chosenMovieDate = chosenMovieDate;
+    public void setEmailFormattedDate(String emailFormattedDate) {
+        this.emailFormattedDate = emailFormattedDate;
+    }
+
+    public String getTicketFormattedDate() {
+        return ticketFormattedDate;
+    }
+
+    public void setTicketFormattedDate(String ticketFormattedDate) {
+        this.ticketFormattedDate = ticketFormattedDate;
     }
 
 }

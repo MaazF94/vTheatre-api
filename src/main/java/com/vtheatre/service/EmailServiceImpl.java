@@ -36,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
         body.append("<p><img src='" + paymentRequest.getMovie().getImg() + "' alt='"
                 + paymentRequest.getMovie().getTitle() + "' width='" + "157" + "' height='" + "232" + "'/></p>");
         body.append("<p>Black Widow<br>" + paymentRequest.getMovie().getLength() + "<br>"
-                + paymentRequest.getChosenMovieDate() + "<br>" + paymentRequest.getShowtime().getShowtime() + "</p>");
+                + paymentRequest.getEmailFormattedDate() + "<br>" + paymentRequest.getShowtime().getShowtime() + "</p>");
         body.append("</div>");
         body.append("<body>");
         body.append("</html>");
