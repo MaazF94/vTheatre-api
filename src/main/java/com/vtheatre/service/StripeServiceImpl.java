@@ -42,7 +42,7 @@ public class StripeServiceImpl implements StripeService {
         PaymentResponse paymentResponse = new PaymentResponse();
         boolean isChargeSuccesful = false;
         boolean isEmailSuccessful = false;
-        String confirmationCode = "";
+        StringBuilder confirmationCode = new StringBuilder("");
 
         ChargeCreateParams params = ChargeCreateParams.builder()
                 .setAmount(paymentRequest.getMovie().getTicketPrice() * 100L).setCurrency(paymentRequest.getCurrency())
@@ -60,26 +60,26 @@ public class StripeServiceImpl implements StripeService {
 
                 // Generate a ticket confirmation code
                 confirmationCode = TicketUtils.confirmationCodeGenerator(charge.getId());
-                logger.info("Confirmation code created {}", confirmationCode);
+                logger.info("Confirmation code created {}", confirmationCode.toString().toUpperCase());
 
                 // Save the ticket
-                ticketService.createTicket(confirmationCode, charge, paymentRequest);
+                ticketService.createTicket(confirmationCode.toString(), charge, paymentRequest);
                 logger.info("Ticket created");
 
                 // Email the user with showtime and confirmation details
-                isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest, confirmationCode);
+                isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest,
+                        confirmationCode.toString().toUpperCase());
             }
         } catch (StripeException e) {
-            e.printStackTrace();
-            logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(), paymentRequest.getEmailAddress(),
-                    paymentRequest.getMovie().getTitle(),
+            logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(),
+                    paymentRequest.getEmailAddress(), paymentRequest.getMovie().getTitle(),
                     paymentRequest.getChosenMovieDate() + " " + paymentRequest.getShowtime().getShowtime());
         }
 
         paymentResponse.setChargeSuccesful(isChargeSuccesful);
         paymentResponse.setEmailSuccessful(isEmailSuccessful);
         paymentResponse.setEmailAddress(paymentRequest.getEmailAddress());
-        paymentResponse.setConfirmationCode(confirmationCode);
+        paymentResponse.setConfirmationCode(confirmationCode.toString().toUpperCase());
 
         return paymentResponse;
     }

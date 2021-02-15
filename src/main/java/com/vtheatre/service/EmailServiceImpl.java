@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
     private String fromEmail;
 
     public boolean sendConfirmationCode(PaymentRequest paymentRequest, String confirmationCode) {
-        logger.info("Inside EmailService with request {} and confirmation code {}", paymentRequest, confirmationCode);
+        logger.info("Getting ready to send email");
 
         StringBuilder body = new StringBuilder();
         boolean result = false;
