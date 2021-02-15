@@ -46,17 +46,17 @@ public class CloudFrontUtils {
      * @return the signedUrl
      */
     public String generateSignedUrl(String s3ObjectKey) {
-        // Urls expire in 30 seconds
-        String time = Instant.now().plusMillis(1000 * 30).toString();
+        // Urls expire in 60 seconds
+        StringBuilder time = new StringBuilder(Instant.now().plusMillis(1000 * 60).toString());
 
         try {
 
             File privateKeyFile = getFileFromResources(privateKeyFilePath, privateKeyFileName, privateKeyFileExtension);
             return CloudFrontUrlSigner.getSignedURLWithCannedPolicy(SignerUtils.Protocol.https, distributionDomain,
-                    privateKeyFile, s3ObjectKey, keyPairId, DateUtils.parseISO8601Date(time));
+                    privateKeyFile, s3ObjectKey, keyPairId, DateUtils.parseISO8601Date(time.toString()));
         } catch (IOException e) {
-            logger.error("Error {} for path {}, name {}, and extension {}", e.getMessage(),
-                    privateKeyFilePath, privateKeyFileName, privateKeyFileExtension);
+            logger.error("Error {} for path {}, name {}, and extension {}", e.getMessage(), privateKeyFilePath,
+                    privateKeyFileName, privateKeyFileExtension);
         } catch (InvalidKeySpecException e) {
             logger.error("Error {} for signingUrl", e.getMessage());
         }
