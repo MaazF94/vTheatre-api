@@ -1,5 +1,7 @@
 package com.vtheatre.data.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,9 @@ public class Ticket {
     private String chargeId;
     private String confirmationCode;
     private String status;
+    private Long movieId;
+    private Date chosenDate;
+    private String emailAddress;
 
     public Long getTicketId() {
         return ticketId;
@@ -54,5 +59,29 @@ public class Ticket {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
+
+    public Date getChosenDate() {
+        return chosenDate;
+    }
+
+    public void setChosenDate(Date chosenDate) {
+        this.chosenDate = chosenDate;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }

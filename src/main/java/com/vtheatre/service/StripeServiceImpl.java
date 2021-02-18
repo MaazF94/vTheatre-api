@@ -73,7 +73,7 @@ public class StripeServiceImpl implements StripeService {
         } catch (StripeException e) {
             logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(),
                     paymentRequest.getEmailAddress(), paymentRequest.getMovie().getTitle(),
-                    paymentRequest.getChosenMovieDate() + " " + paymentRequest.getShowtime().getShowtime());
+                    paymentRequest.getEmailFormattedDate() + " " + paymentRequest.getShowtime().getShowtime());
         }
 
         paymentResponse.setChargeSuccesful(isChargeSuccesful);
