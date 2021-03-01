@@ -22,26 +22,29 @@ public class EmailServiceImpl implements EmailService {
     @Value("${mail.from}")
     private String fromEmail;
 
+    @Value("${cloudfront.icon.url}")
+    private String iconImg;
+
     public boolean sendConfirmationCode(PaymentRequest paymentRequest, String confirmationCode) {
         logger.info("Getting ready to send email");
-
-        StringBuilder body = new StringBuilder();
         boolean result = false;
-
-        body.append("<html>");
-        body.append("<body>");
-        body.append("<div style='" + "text-align: center'" + ">");
-        body.append("<p>Ticket Confirmation Code: " + confirmationCode + "</p>");
-        body.append("<p>ENJOY YOUR MOVIE!</p>");
-        body.append("<p><img src='" + paymentRequest.getMovie().getImg() + "' alt='"
-                + paymentRequest.getMovie().getTitle() + "' width='" + "157" + "' height='" + "232" + "'/></p>");
-        body.append("<p>Black Widow<br>" + paymentRequest.getMovie().getLength() + "<br>"
-                + paymentRequest.getEmailFormattedDate() + "<br>" + paymentRequest.getShowtime().getShowtime() + "</p>");
-        body.append("</div>");
-        body.append("<body>");
-        body.append("</html>");
+        StringBuilder body = new StringBuilder();
 
         try {
+
+            body.append("<html>");
+            body.append("<body>");
+            body.append("<div style='" + "text-align: center'" + ">");
+            body.append("<p><img src='" + iconImg + "' alt='" + paymentRequest.getMovie().getTitle() + "' width='"
+                    + "157" + "' height='" + "157" + "'/></p>");
+            body.append("<p>ENJOY YOUR MOVIE!</p>");
+            body.append("<p>Ticket Confirmation Code: " + confirmationCode + "</p>");
+            body.append("<p>" + paymentRequest.getMovie().getTitle() + "<br>" + paymentRequest.getMovie().getLength()
+                    + "<br>" + paymentRequest.getEmailFormattedDate() + "<br>"
+                    + paymentRequest.getShowtime().getShowtime() + "</p>");
+            body.append("</div>");
+            body.append("<body>");
+            body.append("</html>");
             emailConfig.sendMailWithPlainHtmlBody(fromEmail, paymentRequest.getEmailAddress(),
                     EmailConstants.PURCHASE_CONFIRMATION_SUBJ, body.toString());
             result = true;

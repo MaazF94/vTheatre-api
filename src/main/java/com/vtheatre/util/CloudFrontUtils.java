@@ -2,16 +2,13 @@ package com.vtheatre.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.spec.InvalidKeySpecException;
 import java.time.Instant;
 
 import com.amazonaws.services.cloudfront.util.SignerUtils;
 import com.amazonaws.util.DateUtils;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.cloudfront.CloudFrontUrlSigner;
@@ -51,7 +48,8 @@ public class CloudFrontUtils {
 
         try {
 
-            File privateKeyFile = getFileFromResources(privateKeyFilePath, privateKeyFileName, privateKeyFileExtension);
+            File privateKeyFile = ResourceUtils.getFileFromResources(privateKeyFilePath, privateKeyFileName,
+                    privateKeyFileExtension);
             return CloudFrontUrlSigner.getSignedURLWithCannedPolicy(SignerUtils.Protocol.https, distributionDomain,
                     privateKeyFile, s3ObjectKey, keyPairId, DateUtils.parseISO8601Date(time.toString()));
         } catch (IOException e) {
@@ -64,14 +62,4 @@ public class CloudFrontUtils {
         return "";
 
     }
-
-    public File getFileFromResources(String path, String fileName, String fileExtension) throws IOException {
-        File file = null;
-        ClassPathResource classPathResource = new ClassPathResource(path + fileName + fileExtension);
-        InputStream inputStream = classPathResource.getInputStream();
-        file = File.createTempFile(fileName, fileExtension);
-        FileUtils.copyInputStreamToFile(inputStream, file);
-        return file;
-    }
-
 }
