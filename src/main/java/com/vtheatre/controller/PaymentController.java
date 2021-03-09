@@ -2,7 +2,7 @@ package com.vtheatre.controller;
 
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
-import com.vtheatre.service.StripeService;
+import com.vtheatre.service.PaymentService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,22 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/vtheatre/v1")
-public class StripeController {
+public class PaymentController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    StripeService stripeService;
+    PaymentService paymentService;
 
-    @PostMapping(value = "/completePayment")
-    public ResponseEntity<PaymentResponse> completePayment(@RequestBody PaymentRequest paymentRequest) {
+    @PostMapping(value = "/completeAndroidPayment")
+    public ResponseEntity<PaymentResponse> completeAndroidPayment(@RequestBody PaymentRequest paymentRequest) {
         logger.info("Received payment request");
 
-        PaymentResponse paymentResponse = stripeService.charge(paymentRequest);
+        PaymentResponse paymentResponse = paymentService.processAndroidPayment(paymentRequest);
 
         logger.info("Sending payment response");
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
-
 }

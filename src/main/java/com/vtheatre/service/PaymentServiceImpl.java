@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StripeServiceImpl implements StripeService {
+public class PaymentServiceImpl implements PaymentService {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -27,27 +27,21 @@ public class StripeServiceImpl implements StripeService {
     @Autowired
     private TicketService ticketService;
 
-    @Autowired
-    private EmailService emailService;
-
     @PostConstruct
     public void init() {
         Stripe.apiKey = this.apiKey;
     }
 
     @Override
-    public PaymentResponse charge(PaymentRequest paymentRequest) {
+    public PaymentResponse processAndroidPayment(PaymentRequest paymentRequest) {
         logger.info("Before creating charge");
 
         PaymentResponse paymentResponse = new PaymentResponse();
-        boolean isChargeSuccesful = false;
-        boolean isEmailSuccessful = false;
         StringBuilder confirmationCode = new StringBuilder("");
 
         ChargeCreateParams params = ChargeCreateParams.builder()
                 .setAmount(paymentRequest.getMovie().getTicketPrice() * 100L).setCurrency(paymentRequest.getCurrency())
-                .setDescription(paymentRequest.getDescription()).setSource(paymentRequest.getTokenId())
-                .setReceiptEmail(paymentRequest.getEmailAddress()).build();
+                .setDescription(paymentRequest.getDescription()).setSource(paymentRequest.getTokenId()).build();
 
         try {
 
@@ -55,9 +49,6 @@ public class StripeServiceImpl implements StripeService {
             logger.info("Successful charge with Id {}", charge.getId());
 
             if (charge.getCaptured()) {
-                // Able to capture the charge
-                isChargeSuccesful = true;
-
                 // Generate a ticket confirmation code
                 confirmationCode = TicketUtils.confirmationCodeGenerator(charge.getId());
                 logger.info("Confirmation code created {}", confirmationCode.toString().toUpperCase());
@@ -66,22 +57,15 @@ public class StripeServiceImpl implements StripeService {
                 ticketService.createTicket(confirmationCode.toString(), charge, paymentRequest);
                 logger.info("Ticket created");
 
-                // Email the user with showtime and confirmation details
-                isEmailSuccessful = emailService.sendConfirmationCode(paymentRequest,
-                        confirmationCode.toString().toUpperCase());
             }
         } catch (StripeException e) {
             logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(),
-                    paymentRequest.getEmailAddress(), paymentRequest.getMovie().getTitle(),
-                    paymentRequest.getEmailFormattedDate() + " " + paymentRequest.getShowtime().getShowtime());
+                    paymentRequest.getMovie().getTitle(),
+                    paymentRequest.getChosenDate() + " " + paymentRequest.getShowtime().getShowtime());
         }
 
-        paymentResponse.setChargeSuccesful(isChargeSuccesful);
-        paymentResponse.setEmailSuccessful(isEmailSuccessful);
-        paymentResponse.setEmailAddress(paymentRequest.getEmailAddress());
         paymentResponse.setConfirmationCode(confirmationCode.toString().toUpperCase());
 
         return paymentResponse;
     }
-
 }

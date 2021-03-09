@@ -1,6 +1,8 @@
 package com.vtheatre.controller;
 
 import com.vtheatre.data.model.VerifyConfCodeResponse;
+import com.vtheatre.data.model.PaymentRequest;
+import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
 import com.vtheatre.data.model.VerifyConfCodeRequest;
 import com.vtheatre.service.TicketService;
@@ -25,7 +27,8 @@ public class TicketController {
     TicketService ticketService;
 
     @PostMapping(value = "/verifyConfirmationCode")
-    public ResponseEntity<VerifyConfCodeResponse> verifyConfirmationCode(@RequestBody VerifyConfCodeRequest verifyConfCodeRequest) {
+    public ResponseEntity<VerifyConfCodeResponse> verifyConfirmationCode(
+            @RequestBody VerifyConfCodeRequest verifyConfCodeRequest) {
         logger.info("Verifying confirmation code {}", verifyConfCodeRequest.getConfirmationCode());
 
         VerifyConfCodeResponse ticketResponse = ticketService.verifyConfirmationCode(verifyConfCodeRequest);
@@ -42,6 +45,17 @@ public class TicketController {
         boolean result = ticketService.updateTicketStatus(ticketStatusRequest);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/processIosPayment")
+    public ResponseEntity<PaymentResponse> processIosPayment(@RequestBody PaymentRequest paymentRequest) {
+        logger.info("Received payment request");
+
+        PaymentResponse paymentResponse = ticketService.processIosPayment(paymentRequest);
+
+        logger.info("Sending payment response");
+
+        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
 
 }

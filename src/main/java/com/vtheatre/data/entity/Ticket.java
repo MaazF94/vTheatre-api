@@ -19,7 +19,6 @@ public class Ticket {
     private String status;
     private Long movieId;
     private Date chosenDate;
-    private String emailAddress;
 
     public Long getTicketId() {
         return ticketId;
@@ -75,13 +74,5 @@ public class Ticket {
 
     public void setChosenDate(Date chosenDate) {
         this.chosenDate = chosenDate;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
     }
 }
