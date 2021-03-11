@@ -11,6 +11,7 @@ public class PaymentRequest {
     private Showtime showtime;
     private Movie movie;
     private String chosenDate;
+    private String username;
 
     public String getTokenId() {
         return tokenId;
@@ -58,6 +59,14 @@ public class PaymentRequest {
 
     public void setChosenDate(String chosenDate) {
         this.chosenDate = chosenDate;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }

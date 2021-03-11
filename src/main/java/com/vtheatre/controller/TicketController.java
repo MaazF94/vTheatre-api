@@ -1,10 +1,10 @@
 package com.vtheatre.controller;
 
-import com.vtheatre.data.model.VerifyConfCodeResponse;
+import com.vtheatre.data.model.VerifyTicketResponse;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
-import com.vtheatre.data.model.VerifyConfCodeRequest;
+import com.vtheatre.data.model.VerifyTicketRequest;
 import com.vtheatre.service.TicketService;
 
 import org.slf4j.Logger;
@@ -26,14 +26,14 @@ public class TicketController {
     @Autowired
     TicketService ticketService;
 
-    @PostMapping(value = "/verifyConfirmationCode")
-    public ResponseEntity<VerifyConfCodeResponse> verifyConfirmationCode(
-            @RequestBody VerifyConfCodeRequest verifyConfCodeRequest) {
-        logger.info("Verifying confirmation code {}", verifyConfCodeRequest.getConfirmationCode());
+    @PostMapping(value = "/verifyTicket")
+    public ResponseEntity<VerifyTicketResponse> verifyTicket(@RequestBody VerifyTicketRequest verifyConfCodeRequest) {
+        logger.info("Verifying ticket for user {} showtime {} and date chosen {}", verifyConfCodeRequest.getUsername(),
+                verifyConfCodeRequest.getShowtime(), verifyConfCodeRequest.getChosenDate());
 
-        VerifyConfCodeResponse ticketResponse = ticketService.verifyConfirmationCode(verifyConfCodeRequest);
+        VerifyTicketResponse ticketResponse = ticketService.verifyTicket(verifyConfCodeRequest);
 
-        logger.info("Does confirmation code exist: {}", ticketResponse.isExists());
+        logger.info("Does ticket exist: {}", ticketResponse.isExists());
 
         return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
     }

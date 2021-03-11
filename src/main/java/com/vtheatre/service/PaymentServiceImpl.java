@@ -8,7 +8,6 @@ import com.stripe.model.Charge;
 import com.stripe.param.ChargeCreateParams;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
-import com.vtheatre.util.TicketUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,6 @@ public class PaymentServiceImpl implements PaymentService {
         logger.info("Before creating charge");
 
         PaymentResponse paymentResponse = new PaymentResponse();
-        StringBuilder confirmationCode = new StringBuilder("");
 
         ChargeCreateParams params = ChargeCreateParams.builder()
                 .setAmount(paymentRequest.getMovie().getTicketPrice() * 100L).setCurrency(paymentRequest.getCurrency())
@@ -49,12 +47,9 @@ public class PaymentServiceImpl implements PaymentService {
             logger.info("Successful charge with Id {}", charge.getId());
 
             if (charge.getCaptured()) {
-                // Generate a ticket confirmation code
-                confirmationCode = TicketUtils.confirmationCodeGenerator(charge.getId());
-                logger.info("Confirmation code created {}", confirmationCode.toString().toUpperCase());
 
                 // Save the ticket
-                ticketService.createTicket(confirmationCode.toString(), charge, paymentRequest);
+                ticketService.createTicket(charge, paymentRequest);
                 logger.info("Ticket created");
 
             }
@@ -63,8 +58,6 @@ public class PaymentServiceImpl implements PaymentService {
                     paymentRequest.getMovie().getTitle(),
                     paymentRequest.getChosenDate() + " " + paymentRequest.getShowtime().getShowtime());
         }
-
-        paymentResponse.setConfirmationCode(confirmationCode.toString().toUpperCase());
 
         return paymentResponse;
     }

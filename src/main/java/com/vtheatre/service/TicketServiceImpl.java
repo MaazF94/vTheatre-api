@@ -9,11 +9,10 @@ import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
-import com.vtheatre.data.model.VerifyConfCodeRequest;
-import com.vtheatre.data.model.VerifyConfCodeResponse;
+import com.vtheatre.data.model.VerifyTicketRequest;
+import com.vtheatre.data.model.VerifyTicketResponse;
 import com.vtheatre.repository.TicketRepository;
 import com.vtheatre.util.DateUtils;
-import com.vtheatre.util.TicketUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,28 +28,28 @@ public class TicketServiceImpl implements TicketService {
     private TicketRepository ticketRepository;
 
     @Override
-    public Ticket createTicket(String confirmationCode, Charge charge, PaymentRequest paymentRequest) {
+    public Ticket createTicket(Charge charge, PaymentRequest paymentRequest) {
         logger.info("Creating ticket");
 
         Ticket ticket = new Ticket();
         Date chosenDate = DateUtils.transformDateFromString(paymentRequest.getChosenDate());
 
         ticket.setChargeId(charge.getId());
-        ticket.setConfirmationCode(confirmationCode);
         ticket.setShowtimeId(paymentRequest.getShowtime().getShowtimeId());
         ticket.setStatus(TicketConstants.ACTIVE);
         ticket.setChosenDate(chosenDate);
         ticket.setMovieId(paymentRequest.getMovie().getMovieId());
+        ticket.setUsername(paymentRequest.getUsername());
         return ticketRepository.save(ticket);
     }
 
     @Override
-    public VerifyConfCodeResponse verifyConfirmationCode(VerifyConfCodeRequest verifyConfCodeRequest) {
-        VerifyConfCodeResponse ticketResponse = new VerifyConfCodeResponse();
+    public VerifyTicketResponse verifyTicket(VerifyTicketRequest verifyConfCodeRequest) {
+        VerifyTicketResponse ticketResponse = new VerifyTicketResponse();
         Date chosenDate = DateUtils.transformDateFromString(verifyConfCodeRequest.getChosenDate());
 
-        Optional<Ticket> ticket = ticketRepository.findByConfirmationCodeAndShowtimeAndChosenDate(
-                verifyConfCodeRequest.getConfirmationCode(), verifyConfCodeRequest.getShowtime(), chosenDate);
+        Optional<Ticket> ticket = ticketRepository.findByUsernameAndShowtimeAndChosenDate(
+                verifyConfCodeRequest.getUsername(), verifyConfCodeRequest.getShowtime(), chosenDate);
 
         if (ticket.isPresent()) {
             ticketResponse.setStatus(ticket.get().getStatus());
@@ -64,10 +63,12 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public boolean updateTicketStatus(TicketStatusRequest ticketStatusRequest) {
-        logger.info("Finding ticket with code {}", ticketStatusRequest.getConfirmationCode());
+        logger.info("Finding ticket for user {}", ticketStatusRequest.getUsername());
 
-        Optional<Ticket> ticketOptional = ticketRepository
-                .findByConfirmationCode(ticketStatusRequest.getConfirmationCode());
+        Date chosenDate = DateUtils.transformDateFromString(ticketStatusRequest.getChosenDate());
+
+        Optional<Ticket> ticketOptional = ticketRepository.findByUsernameAndShowtimeAndChosenDate(
+                ticketStatusRequest.getUsername(), ticketStatusRequest.getShowtime(), chosenDate);
 
         if (ticketOptional.isPresent()) {
             logger.info("Ticket found");
@@ -84,32 +85,30 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket createTicket(String confirmationCode, PaymentRequest paymentRequest) {
+    public Ticket createTicket(PaymentRequest paymentRequest) {
         logger.info("Creating ticket");
 
         Ticket ticket = new Ticket();
         Date chosenDate = DateUtils.transformDateFromString(paymentRequest.getChosenDate());
 
-        ticket.setConfirmationCode(confirmationCode);
         ticket.setShowtimeId(paymentRequest.getShowtime().getShowtimeId());
         ticket.setStatus(TicketConstants.ACTIVE);
         ticket.setChosenDate(chosenDate);
         ticket.setMovieId(paymentRequest.getMovie().getMovieId());
+        ticket.setUsername(paymentRequest.getUsername());
         return ticketRepository.save(ticket);
     }
 
     @Override
     public PaymentResponse processIosPayment(PaymentRequest paymentRequest) {
-        StringBuilder confirmationCode = new StringBuilder("");
         PaymentResponse paymentResponse = new PaymentResponse();
 
-        // Generate a ticket confirmation code
-        confirmationCode = TicketUtils.confirmationCodeGenerator();
         // Save the ticket
-        createTicket(confirmationCode.toString(), paymentRequest);
-        logger.info("Confirmation code created {}", confirmationCode.toString().toUpperCase());
+        createTicket(paymentRequest);
+        logger.info("Ticket created for user {} showtime {} and chosen date {}", paymentRequest.getUsername(),
+                paymentRequest.getShowtime(), paymentRequest.getChosenDate());
 
-        paymentResponse.setConfirmationCode(confirmationCode.toString().toUpperCase());
+        paymentResponse.setConfirmed(true);
 
         return paymentResponse;
     }

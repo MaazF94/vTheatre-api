@@ -5,19 +5,19 @@ import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
-import com.vtheatre.data.model.VerifyConfCodeRequest;
-import com.vtheatre.data.model.VerifyConfCodeResponse;
+import com.vtheatre.data.model.VerifyTicketRequest;
+import com.vtheatre.data.model.VerifyTicketResponse;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public interface TicketService {
 
-    Ticket createTicket(String confirmationCode, Charge charge, PaymentRequest paymentRequest);
+    Ticket createTicket(Charge charge, PaymentRequest paymentRequest);
 
-    Ticket createTicket(String confirmationCode, PaymentRequest paymentRequest);
+    Ticket createTicket(PaymentRequest paymentRequest);
 
-    VerifyConfCodeResponse verifyConfirmationCode(VerifyConfCodeRequest verifyConfCodeRequest);
+    VerifyTicketResponse verifyTicket(VerifyTicketRequest verifyConfCodeRequest);
 
     boolean updateTicketStatus(TicketStatusRequest ticketStatusRequest);
 

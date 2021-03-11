@@ -15,10 +15,10 @@ public class Ticket {
     private Long ticketId;
     private Long showtimeId;
     private String chargeId;
-    private String confirmationCode;
     private String status;
     private Long movieId;
     private Date chosenDate;
+    private String username;
 
     public Long getTicketId() {
         return ticketId;
@@ -44,14 +44,6 @@ public class Ticket {
         this.chargeId = chargeId;
     }
 
-    public String getConfirmationCode() {
-        return confirmationCode;
-    }
-
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -74,5 +66,13 @@ public class Ticket {
 
     public void setChosenDate(Date chosenDate) {
         this.chosenDate = chosenDate;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

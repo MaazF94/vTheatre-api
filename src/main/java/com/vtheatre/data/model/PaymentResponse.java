@@ -2,13 +2,14 @@ package com.vtheatre.data.model;
 
 public class PaymentResponse {
 
-    private String confirmationCode;
+    private boolean confirmed;
 
-    public String getConfirmationCode() {
-        return confirmationCode;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
+
 }
