@@ -12,4 +12,8 @@ public class PaymentResponse {
         this.confirmed = confirmed;
     }
 
+    public boolean getConfirmed() {
+        return this.confirmed;
+    }
+
 }

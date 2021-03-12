@@ -53,7 +53,7 @@ public class TicketController {
 
         PaymentResponse paymentResponse = ticketService.processIosPayment(paymentRequest);
 
-        logger.info("Sending payment response");
+        logger.info("Sending payment response with result {}", paymentResponse.getConfirmed());
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }

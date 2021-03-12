@@ -50,6 +50,8 @@ public class PaymentServiceImpl implements PaymentService {
 
                 // Save the ticket
                 ticketService.createTicket(charge, paymentRequest);
+                paymentResponse.setConfirmed(true);
+
                 logger.info("Ticket created");
 
             }
@@ -57,6 +59,10 @@ public class PaymentServiceImpl implements PaymentService {
             logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(),
                     paymentRequest.getMovie().getTitle(),
                     paymentRequest.getChosenDate() + " " + paymentRequest.getShowtime().getShowtime());
+        } catch (Exception e) {
+            paymentResponse.setConfirmed(false);
+            logger.info("Duplicate ticket found for user {} showtime {} and chosen date {}",
+                    paymentRequest.getUsername(), paymentRequest.getShowtime(), paymentRequest.getChosenDate());
         }
 
         return paymentResponse;

@@ -103,12 +103,19 @@ public class TicketServiceImpl implements TicketService {
     public PaymentResponse processIosPayment(PaymentRequest paymentRequest) {
         PaymentResponse paymentResponse = new PaymentResponse();
 
-        // Save the ticket
-        createTicket(paymentRequest);
-        logger.info("Ticket created for user {} showtime {} and chosen date {}", paymentRequest.getUsername(),
-                paymentRequest.getShowtime(), paymentRequest.getChosenDate());
+        try {
+            // Save the ticket
+            createTicket(paymentRequest);
 
-        paymentResponse.setConfirmed(true);
+            logger.info("Ticket created for user {} showtime {} and chosen date {}", paymentRequest.getUsername(),
+                    paymentRequest.getShowtime(), paymentRequest.getChosenDate());
+
+            paymentResponse.setConfirmed(true);
+        } catch (Exception e) {
+            paymentResponse.setConfirmed(false);
+            logger.info("Duplicate ticket found for user {} showtime {} and chosen date {}",
+                    paymentRequest.getUsername(), paymentRequest.getShowtime(), paymentRequest.getChosenDate());
+        }
 
         return paymentResponse;
     }

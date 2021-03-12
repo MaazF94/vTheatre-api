@@ -29,7 +29,7 @@ public class PaymentController {
 
         PaymentResponse paymentResponse = paymentService.processAndroidPayment(paymentRequest);
 
-        logger.info("Sending payment response");
+        logger.info("Sending payment response with result {}", paymentResponse.getConfirmed());
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
