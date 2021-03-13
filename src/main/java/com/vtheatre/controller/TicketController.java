@@ -1,6 +1,11 @@
 package com.vtheatre.controller;
 
 import com.vtheatre.data.model.VerifyTicketResponse;
+
+import java.util.List;
+
+import com.vtheatre.data.model.MyTicketsRequest;
+import com.vtheatre.data.model.MyTicketsResponse;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
@@ -56,6 +61,17 @@ public class TicketController {
         logger.info("Sending payment response with result {}", paymentResponse.getConfirmed());
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getTickets")
+    public ResponseEntity<List<MyTicketsResponse>> getTickets(@RequestBody MyTicketsRequest myTicketsRequest) {
+        logger.info("Retrieving tickets for user {}", myTicketsRequest.getUsername());
+
+        List<MyTicketsResponse> myTicketsResponse = ticketService.getTickets(myTicketsRequest.getUsername());
+
+        logger.info("Sending tickets response");
+
+        return new ResponseEntity<>(myTicketsResponse, HttpStatus.OK);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.vtheatre.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import com.stripe.model.Charge;
 import com.vtheatre.common.TicketConstants;
 import com.vtheatre.data.entity.Ticket;
+import com.vtheatre.data.model.MyTicketsResponse;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
@@ -118,5 +120,10 @@ public class TicketServiceImpl implements TicketService {
         }
 
         return paymentResponse;
+    }
+
+    @Override
+    public List<MyTicketsResponse> getTickets(String username) {
+        return ticketRepository.findByUsername(username);
     }
 }
