@@ -2,40 +2,18 @@ package com.vtheatre.data.model;
 
 public class PaymentResponse {
 
-    private String confirmationCode;
-    private String emailAddress;
-    private boolean isEmailSuccessful;
-    private boolean isChargeSuccesful;
+    private boolean confirmed;
 
-    public String getConfirmationCode() {
-        return confirmationCode;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public boolean getConfirmed() {
+        return this.confirmed;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public boolean isEmailSuccessful() {
-        return isEmailSuccessful;
-    }
-
-    public void setEmailSuccessful(boolean isEmailSuccessful) {
-        this.isEmailSuccessful = isEmailSuccessful;
-    }
-
-    public boolean isChargeSuccesful() {
-        return isChargeSuccesful;
-    }
-
-    public void setChargeSuccesful(boolean isChargeSuccesful) {
-        this.isChargeSuccesful = isChargeSuccesful;
-    }
 }

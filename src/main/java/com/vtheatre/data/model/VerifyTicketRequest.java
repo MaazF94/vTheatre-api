@@ -1,17 +1,17 @@
 package com.vtheatre.data.model;
 
-public class VerifyConfCodeRequest {
+public class VerifyTicketRequest {
 
-    private String confirmationCode;
+    private String username;
     private String chosenDate;
     private String showtime;
 
-    public String getConfirmationCode() {
-        return confirmationCode;
+    public String getUsername() {
+        return username;
     }
 
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getChosenDate() {

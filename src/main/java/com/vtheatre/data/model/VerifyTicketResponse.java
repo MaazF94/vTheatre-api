@@ -1,6 +1,6 @@
 package com.vtheatre.data.model;
 
-public class VerifyConfCodeResponse {
+public class VerifyTicketResponse {
 
     private String status;
     private boolean exists;

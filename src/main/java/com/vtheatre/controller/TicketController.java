@@ -1,8 +1,15 @@
 package com.vtheatre.controller;
 
-import com.vtheatre.data.model.VerifyConfCodeResponse;
+import com.vtheatre.data.model.VerifyTicketResponse;
+
+import java.util.List;
+
+import com.vtheatre.data.model.MyTicketsRequest;
+import com.vtheatre.data.model.MyTicketsResponse;
+import com.vtheatre.data.model.PaymentRequest;
+import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
-import com.vtheatre.data.model.VerifyConfCodeRequest;
+import com.vtheatre.data.model.VerifyTicketRequest;
 import com.vtheatre.service.TicketService;
 
 import org.slf4j.Logger;
@@ -24,13 +31,14 @@ public class TicketController {
     @Autowired
     TicketService ticketService;
 
-    @PostMapping(value = "/verifyConfirmationCode")
-    public ResponseEntity<VerifyConfCodeResponse> verifyConfirmationCode(@RequestBody VerifyConfCodeRequest verifyConfCodeRequest) {
-        logger.info("Verifying confirmation code {}", verifyConfCodeRequest.getConfirmationCode());
+    @PostMapping(value = "/verifyTicket")
+    public ResponseEntity<VerifyTicketResponse> verifyTicket(@RequestBody VerifyTicketRequest verifyConfCodeRequest) {
+        logger.info("Verifying ticket for user {} showtime {} and date chosen {}", verifyConfCodeRequest.getUsername(),
+                verifyConfCodeRequest.getShowtime(), verifyConfCodeRequest.getChosenDate());
 
-        VerifyConfCodeResponse ticketResponse = ticketService.verifyConfirmationCode(verifyConfCodeRequest);
+        VerifyTicketResponse ticketResponse = ticketService.verifyTicket(verifyConfCodeRequest);
 
-        logger.info("Does confirmation code exist: {}", ticketResponse.isExists());
+        logger.info("Does ticket exist: {}", ticketResponse.isExists());
 
         return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
     }
@@ -42,6 +50,28 @@ public class TicketController {
         boolean result = ticketService.updateTicketStatus(ticketStatusRequest);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/processIosPayment")
+    public ResponseEntity<PaymentResponse> processIosPayment(@RequestBody PaymentRequest paymentRequest) {
+        logger.info("Received payment request");
+
+        PaymentResponse paymentResponse = ticketService.processIosPayment(paymentRequest);
+
+        logger.info("Sending payment response with result {}", paymentResponse.getConfirmed());
+
+        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getTickets")
+    public ResponseEntity<List<MyTicketsResponse>> getTickets(@RequestBody MyTicketsRequest myTicketsRequest) {
+        logger.info("Retrieving tickets for user {}", myTicketsRequest.getUsername());
+
+        List<MyTicketsResponse> myTicketsResponse = ticketService.getTickets(myTicketsRequest.getUsername());
+
+        logger.info("Sending tickets response");
+
+        return new ResponseEntity<>(myTicketsResponse, HttpStatus.OK);
     }
 
 }

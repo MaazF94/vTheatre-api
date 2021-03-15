@@ -2,15 +2,17 @@ package com.vtheatre.data.model;
 
 public class TicketStatusRequest {
 
-    private String confirmationCode;
+    private String username;
+    private String chosenDate;
+    private String showtime;
     private String status;
 
-    public String getConfirmationCode() {
-        return confirmationCode;
+    public String getUsername() {
+        return username;
     }
 
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getStatus() {
@@ -19,6 +21,22 @@ public class TicketStatusRequest {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getChosenDate() {
+        return chosenDate;
+    }
+
+    public void setChosenDate(String chosenDate) {
+        this.chosenDate = chosenDate;
+    }
+
+    public String getShowtime() {
+        return showtime;
+    }
+
+    public void setShowtime(String showtime) {
+        this.showtime = showtime;
     }
 
 }

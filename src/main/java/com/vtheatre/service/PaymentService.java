@@ -6,8 +6,8 @@ import com.vtheatre.data.model.PaymentResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface StripeService {
+public interface PaymentService {
 
-	PaymentResponse charge(PaymentRequest paymentRequest);
+	PaymentResponse processAndroidPayment(PaymentRequest paymentRequest);
 
 }

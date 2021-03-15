@@ -8,11 +8,10 @@ public class PaymentRequest {
     private String tokenId;
     private String description;
     private String currency;
-    private String emailAddress;
     private Showtime showtime;
     private Movie movie;
-    private String emailFormattedDate;
-    private String ticketFormattedDate;
+    private String chosenDate;
+    private String username;
 
     public String getTokenId() {
         return tokenId;
@@ -38,14 +37,6 @@ public class PaymentRequest {
         this.currency = currency;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
     public Showtime getShowtime() {
         return showtime;
     }
@@ -62,20 +53,20 @@ public class PaymentRequest {
         this.movie = movie;
     }
 
-    public String getEmailFormattedDate() {
-        return emailFormattedDate;
+    public String getChosenDate() {
+        return chosenDate;
     }
 
-    public void setEmailFormattedDate(String emailFormattedDate) {
-        this.emailFormattedDate = emailFormattedDate;
+    public void setChosenDate(String chosenDate) {
+        this.chosenDate = chosenDate;
     }
 
-    public String getTicketFormattedDate() {
-        return ticketFormattedDate;
+    public String getUsername() {
+        return username;
     }
 
-    public void setTicketFormattedDate(String ticketFormattedDate) {
-        this.ticketFormattedDate = ticketFormattedDate;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }
