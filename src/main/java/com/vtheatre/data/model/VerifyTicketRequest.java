@@ -5,6 +5,18 @@ public class VerifyTicketRequest {
     private String username;
     private String chosenDate;
     private String showtime;
+    private Long movieId;
+
+    public VerifyTicketRequest() {
+
+    }
+
+    public VerifyTicketRequest(String username, String chosenDate, String showtime, Long movieId) {
+        this.username = username;
+        this.chosenDate = chosenDate;
+        this.showtime = showtime;
+        this.movieId = movieId;
+    }
 
     public String getUsername() {
         return username;
@@ -30,4 +42,11 @@ public class VerifyTicketRequest {
         this.showtime = showtime;
     }
 
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
 }

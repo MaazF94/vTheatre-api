@@ -6,6 +6,7 @@ public class TicketStatusRequest {
     private String chosenDate;
     private String showtime;
     private String status;
+    private Long movieId;
 
     public String getUsername() {
         return username;
@@ -37,6 +38,14 @@ public class TicketStatusRequest {
 
     public void setShowtime(String showtime) {
         this.showtime = showtime;
+    }
+
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
 }

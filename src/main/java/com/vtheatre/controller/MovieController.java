@@ -33,7 +33,6 @@ public class MovieController {
 
     @GetMapping(path = "/getMovies")
     public ResponseEntity<List<Movie>> getMovies() {
-        logger.info("Before retrieving movies");
         List<Movie> movies = movieService.lookup();
         logger.info("After retrieving movies");
         for (Movie movie : movies) {
@@ -55,7 +54,7 @@ public class MovieController {
 
         VideoTimeWatched result = movieService.recordTimeVideoWatched(videoTimeWatchedRequest);
         logger.info("Saved the recorded time watched");
-        
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
