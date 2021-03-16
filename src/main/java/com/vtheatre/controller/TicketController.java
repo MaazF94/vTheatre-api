@@ -33,8 +33,9 @@ public class TicketController {
 
     @PostMapping(value = "/verifyTicket")
     public ResponseEntity<VerifyTicketResponse> verifyTicket(@RequestBody VerifyTicketRequest verifyConfCodeRequest) {
-        logger.info("Verifying ticket for user {} showtime {} and date chosen {}", verifyConfCodeRequest.getUsername(),
-                verifyConfCodeRequest.getShowtime(), verifyConfCodeRequest.getChosenDate());
+        logger.info("Verifying ticket for user {} showtime {} date chosen {} and movieId {}",
+                verifyConfCodeRequest.getUsername(), verifyConfCodeRequest.getShowtime(),
+                verifyConfCodeRequest.getChosenDate(), verifyConfCodeRequest.getMovieId());
 
         VerifyTicketResponse ticketResponse = ticketService.verifyTicket(verifyConfCodeRequest);
 

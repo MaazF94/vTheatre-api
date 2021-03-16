@@ -8,6 +8,8 @@ import com.stripe.model.Charge;
 import com.stripe.param.ChargeCreateParams;
 import com.vtheatre.data.model.PaymentRequest;
 import com.vtheatre.data.model.PaymentResponse;
+import com.vtheatre.data.model.VerifyTicketRequest;
+import com.vtheatre.data.model.VerifyTicketResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,26 +45,34 @@ public class PaymentServiceImpl implements PaymentService {
 
         try {
 
-            Charge charge = Charge.create(params);
-            logger.info("Successful charge with Id {}", charge.getId());
+            // See if the user already has a ticket to this showing
+            VerifyTicketResponse verifyTicketResponse = ticketService
+                    .verifyTicket(new VerifyTicketRequest(paymentRequest.getUsername(), paymentRequest.getChosenDate(),
+                            paymentRequest.getShowtime().getShowtime(), paymentRequest.getMovie().getMovieId()));
 
-            if (charge.getCaptured()) {
+            if (!verifyTicketResponse.isExists()) {
+                Charge charge = Charge.create(params);
+                logger.info("Successful charge with Id {}", charge.getId());
 
-                // Save the ticket
-                ticketService.createTicket(charge, paymentRequest);
-                paymentResponse.setConfirmed(true);
+                if (charge.getCaptured()) {
 
-                logger.info("Ticket created");
+                    // Save the ticket
+                    ticketService.createTicket(charge, paymentRequest);
+                    paymentResponse.setConfirmed(true);
 
+                    logger.info("Ticket created");
+
+                }
+            } else {
+                logger.info("Duplicate ticket found for user {} showtime {} and chosen date {}",
+                        paymentRequest.getUsername(), paymentRequest.getShowtime(), paymentRequest.getChosenDate());
+                paymentResponse.setConfirmed(false);
             }
+
         } catch (StripeException e) {
             logger.info("Error {} with stripe charge to {} for {} on {}", e.getMessage(),
                     paymentRequest.getMovie().getTitle(),
                     paymentRequest.getChosenDate() + " " + paymentRequest.getShowtime().getShowtime());
-        } catch (Exception e) {
-            paymentResponse.setConfirmed(false);
-            logger.info("Duplicate ticket found for user {} showtime {} and chosen date {}",
-                    paymentRequest.getUsername(), paymentRequest.getShowtime(), paymentRequest.getChosenDate());
         }
 
         return paymentResponse;

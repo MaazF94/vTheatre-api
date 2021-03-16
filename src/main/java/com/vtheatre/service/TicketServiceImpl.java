@@ -50,8 +50,9 @@ public class TicketServiceImpl implements TicketService {
         VerifyTicketResponse ticketResponse = new VerifyTicketResponse();
         Date chosenDate = DateUtils.transformDateFromString(verifyConfCodeRequest.getChosenDate());
 
-        Optional<Ticket> ticket = ticketRepository.findByUsernameAndShowtimeAndChosenDate(
-                verifyConfCodeRequest.getUsername(), verifyConfCodeRequest.getShowtime(), chosenDate);
+        Optional<Ticket> ticket = ticketRepository.findByUsernameAndShowtimeAndChosenDateAndMovieId(
+                verifyConfCodeRequest.getUsername(), verifyConfCodeRequest.getShowtime(), chosenDate,
+                verifyConfCodeRequest.getMovieId());
 
         if (ticket.isPresent()) {
             ticketResponse.setStatus(ticket.get().getStatus());
@@ -69,8 +70,9 @@ public class TicketServiceImpl implements TicketService {
 
         Date chosenDate = DateUtils.transformDateFromString(ticketStatusRequest.getChosenDate());
 
-        Optional<Ticket> ticketOptional = ticketRepository.findByUsernameAndShowtimeAndChosenDate(
-                ticketStatusRequest.getUsername(), ticketStatusRequest.getShowtime(), chosenDate);
+        Optional<Ticket> ticketOptional = ticketRepository.findByUsernameAndShowtimeAndChosenDateAndMovieId(
+                ticketStatusRequest.getUsername(), ticketStatusRequest.getShowtime(), chosenDate,
+                ticketStatusRequest.getMovieId());
 
         if (ticketOptional.isPresent()) {
             logger.info("Ticket found");
@@ -79,9 +81,9 @@ public class TicketServiceImpl implements TicketService {
             ticket.setStatus(ticketStatusRequest.getStatus());
             ticketRepository.save(ticket);
             return true;
+        } else {
+            logger.info("Ticket not found");
         }
-
-        logger.info("Ticket not found");
 
         return false;
     }

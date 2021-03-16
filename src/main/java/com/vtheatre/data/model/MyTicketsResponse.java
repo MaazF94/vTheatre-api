@@ -7,11 +7,13 @@ public class MyTicketsResponse {
     private String title;
     private Date chosenDate;
     private String showtime;
+    private Long movieId;
 
-    public MyTicketsResponse(String title, String showtime, Date chosenDate) {
+    public MyTicketsResponse(String title, String showtime, Date chosenDate, Long movieId) {
         this.title = title;
         this.showtime = showtime;
         this.chosenDate = chosenDate;
+        this.movieId = movieId;
     }
 
     public String getTitle() {
@@ -36,6 +38,14 @@ public class MyTicketsResponse {
 
     public void setShowtime(String showtime) {
         this.showtime = showtime;
+    }
+
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
 }
