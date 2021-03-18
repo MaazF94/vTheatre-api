@@ -23,7 +23,8 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public List<Movie> lookup() {
-		return movieRepository.findAllByOrderByTitleAsc();
+		int active = 1;
+		return movieRepository.findByActiveOrderByTitleAsc(active);
 	}
 
 	@Override
