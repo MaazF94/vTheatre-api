@@ -19,6 +19,8 @@ public class Ticket {
     private Long movieId;
     private Date chosenDate;
     private String username;
+    private String appleOrderId;
+    private String appleTransactionReceipt;
 
     public Long getTicketId() {
         return ticketId;
@@ -74,5 +76,21 @@ public class Ticket {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAppleOrderId() {
+        return appleOrderId;
+    }
+
+    public void setAppleOrderId(String appleOrderId) {
+        this.appleOrderId = appleOrderId;
+    }
+
+    public String getAppleTransactionReceipt() {
+        return appleTransactionReceipt;
+    }
+
+    public void setAppleTransactionReceipt(String appleTransactionReceipt) {
+        this.appleTransactionReceipt = appleTransactionReceipt;
     }
 }

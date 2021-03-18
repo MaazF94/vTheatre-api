@@ -12,6 +12,8 @@ public class PaymentRequest {
     private Movie movie;
     private String chosenDate;
     private String username;
+    private String appleOrderId;
+    private String appleTransactionReceipt;
 
     public String getTokenId() {
         return tokenId;
@@ -67,6 +69,22 @@ public class PaymentRequest {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAppleOrderId() {
+        return appleOrderId;
+    }
+
+    public void setAppleOrderId(String appleOrderId) {
+        this.appleOrderId = appleOrderId;
+    }
+
+    public String getAppleTransactionReceipt() {
+        return appleTransactionReceipt;
+    }
+
+    public void setAppleTransactionReceipt(String appleTransactionReceipt) {
+        this.appleTransactionReceipt = appleTransactionReceipt;
     }
 
 }

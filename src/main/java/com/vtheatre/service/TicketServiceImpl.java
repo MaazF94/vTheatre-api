@@ -100,6 +100,10 @@ public class TicketServiceImpl implements TicketService {
         ticket.setChosenDate(chosenDate);
         ticket.setMovieId(paymentRequest.getMovie().getMovieId());
         ticket.setUsername(paymentRequest.getUsername());
+        if (paymentRequest.getAppleOrderId() != null && paymentRequest.getAppleTransactionReceipt() != null) {
+            ticket.setAppleOrderId(paymentRequest.getAppleOrderId());
+            ticket.setAppleTransactionReceipt(paymentRequest.getAppleTransactionReceipt());
+        }
         return ticketRepository.save(ticket);
     }
 
