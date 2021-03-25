@@ -30,6 +30,7 @@ public class Movie {
     private Long ticketPrice;
     private String vid;
     private String iosProductId;
+    private int active;
 
     public Long getMovieId() {
         return movieId;
@@ -141,5 +142,13 @@ public class Movie {
 
     public void setIosProductId(String iosProductId) {
         this.iosProductId = iosProductId;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }
