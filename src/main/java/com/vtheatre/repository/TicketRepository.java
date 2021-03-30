@@ -8,8 +8,10 @@ import com.vtheatre.data.entity.Ticket;
 import com.vtheatre.data.model.MyTicketsResponse;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
@@ -20,5 +22,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query(value = "SELECT new com.vtheatre.data.model.MyTicketsResponse(m.title, s.showtime, t.chosenDate, t.movieId) from Ticket t inner join Showtime s on t.showtimeId = s.showtimeId inner join Movie m on t.movieId = m.movieId where t.username = ?1 order by t.chosenDate, str_to_date(s.showtime,'%l:%i %p')")
     List<MyTicketsResponse> findByUsername(String username);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE ticket t set t.status = 'REFUNDED' where t.apple_transaction_id = ?1", nativeQuery = true)
+    void setTicketByAppleTransactionId(String appleTransactionId);
 
 }

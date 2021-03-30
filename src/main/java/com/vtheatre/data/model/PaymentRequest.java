@@ -12,7 +12,7 @@ public class PaymentRequest {
     private Movie movie;
     private String chosenDate;
     private String username;
-    private String appleOrderId;
+    private String appleTransactionId;
     private String appleTransactionReceipt;
 
     public String getTokenId() {
@@ -71,12 +71,12 @@ public class PaymentRequest {
         this.username = username;
     }
 
-    public String getAppleOrderId() {
-        return appleOrderId;
+    public String getAppleTransactionId() {
+        return appleTransactionId;
     }
 
-    public void setAppleOrderId(String appleOrderId) {
-        this.appleOrderId = appleOrderId;
+    public void setAppleTransactionId(String appleTransactionId) {
+        this.appleTransactionId = appleTransactionId;
     }
 
     public String getAppleTransactionReceipt() {

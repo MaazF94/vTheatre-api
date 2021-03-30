@@ -1,6 +1,7 @@
 package com.vtheatre.controller;
 
 import com.vtheatre.data.model.VerifyTicketResponse;
+import com.vtheatre.data.model.receiptvalidation.ValidateReceiptRequest;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class TicketController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    // delete this after UI is live in next update
     @PostMapping(value = "/processIosPayment")
     public ResponseEntity<PaymentResponse> processIosPayment(@RequestBody PaymentRequest paymentRequest) {
         logger.info("Received payment request");
@@ -73,6 +75,17 @@ public class TicketController {
         logger.info("Sending tickets response");
 
         return new ResponseEntity<>(myTicketsResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/validateReceipt")
+    public ResponseEntity<Boolean> validateReceipt(@RequestBody ValidateReceiptRequest validateReceiptRequest) {
+        logger.info("Received apple server notification");
+
+        boolean verified = ticketService.validateReceipt(validateReceiptRequest);
+
+        logger.info("Processed apple server notification");
+
+        return new ResponseEntity<Boolean>(verified, HttpStatus.OK);
     }
 
 }

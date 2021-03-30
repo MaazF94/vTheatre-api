@@ -10,6 +10,7 @@ import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
 import com.vtheatre.data.model.VerifyTicketRequest;
 import com.vtheatre.data.model.VerifyTicketResponse;
+import com.vtheatre.data.model.receiptvalidation.ValidateReceiptRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -18,14 +19,17 @@ public interface TicketService {
 
     Ticket createTicket(Charge charge, PaymentRequest paymentRequest);
 
-    Ticket createTicket(PaymentRequest paymentRequest);
-
     VerifyTicketResponse verifyTicket(VerifyTicketRequest verifyConfCodeRequest);
 
     boolean updateTicketStatus(TicketStatusRequest ticketStatusRequest);
 
+    PaymentResponse completeIosPayment(PaymentRequest paymentRequest);
+
+    // delete this after UI is live in next update
     PaymentResponse processIosPayment(PaymentRequest paymentRequest);
 
-    List<MyTicketsResponse> getTickets(String string);
+    List<MyTicketsResponse> getTickets(String username);
+
+    boolean validateReceipt(ValidateReceiptRequest validateReceiptRequest);
 
 }
