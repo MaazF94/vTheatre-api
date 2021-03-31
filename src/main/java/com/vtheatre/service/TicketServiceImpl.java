@@ -177,6 +177,15 @@ public class TicketServiceImpl implements TicketService {
             RequestBody requestBody = new RequestBody(validateReceiptRequest.getTransactionReceipt());
             ResponseEntity<ResponseBody> result = restTemplate.postForEntity(uri, requestBody, ResponseBody.class);
             ResponseBody responseBody = result.getBody();
+            if (responseBody.getStatus().equals("21007")) {
+                uri = new URI("https://sandbox.itunes.apple.com/verifyReceipt");
+                result = restTemplate.postForEntity(uri, requestBody, ResponseBody.class);
+                responseBody = result.getBody();
+            } else if (responseBody.getStatus().equals("21008")) {
+                uri = new URI("https://buy.itunes.apple.com/verifyReceipt");
+                result = restTemplate.postForEntity(uri, requestBody, ResponseBody.class);
+                responseBody = result.getBody();
+            }
             for (InApp transaction : responseBody.getReceipt().getInApp()) {
                 if (transaction.getCancellationDate() != null
                         && transaction.getOriginalTransactionId().equals(validateReceiptRequest.getTransactionId())) {
