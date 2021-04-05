@@ -1,5 +1,7 @@
 package com.vtheatre.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +15,20 @@ import com.vtheatre.data.model.PaymentResponse;
 import com.vtheatre.data.model.TicketStatusRequest;
 import com.vtheatre.data.model.VerifyTicketRequest;
 import com.vtheatre.data.model.VerifyTicketResponse;
+import com.vtheatre.data.model.receiptvalidation.InApp;
+import com.vtheatre.data.model.receiptvalidation.RequestBody;
+import com.vtheatre.data.model.receiptvalidation.ResponseBody;
+import com.vtheatre.data.model.receiptvalidation.ValidateReceiptRequest;
 import com.vtheatre.repository.TicketRepository;
 import com.vtheatre.util.DateUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class TicketServiceImpl implements TicketService {
@@ -28,6 +37,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Value("${apple.receipt.validation.url}")
+    private String validateReceiptUrl;
 
     @Override
     public Ticket createTicket(Charge charge, PaymentRequest paymentRequest) {
@@ -57,6 +69,8 @@ public class TicketServiceImpl implements TicketService {
         if (ticket.isPresent()) {
             ticketResponse.setStatus(ticket.get().getStatus());
             ticketResponse.setExists(true);
+            ticketResponse.setAppleTransactionReceipt(ticket.get().getAppleTransactionReceipt());
+            ticketResponse.setAppleTransactionId(ticket.get().getAppleTransactionId());
         } else {
             ticketResponse.setExists(false);
         }
@@ -88,8 +102,7 @@ public class TicketServiceImpl implements TicketService {
         return false;
     }
 
-    @Override
-    public Ticket createTicket(PaymentRequest paymentRequest) {
+    private Ticket createTicket(PaymentRequest paymentRequest) {
         logger.info("Creating ticket");
 
         Ticket ticket = new Ticket();
@@ -100,11 +113,15 @@ public class TicketServiceImpl implements TicketService {
         ticket.setChosenDate(chosenDate);
         ticket.setMovieId(paymentRequest.getMovie().getMovieId());
         ticket.setUsername(paymentRequest.getUsername());
+        if (paymentRequest.getAppleTransactionId() != null && paymentRequest.getAppleTransactionReceipt() != null) {
+            ticket.setAppleTransactionId(paymentRequest.getAppleTransactionId());
+            ticket.setAppleTransactionReceipt(paymentRequest.getAppleTransactionReceipt());
+        }
         return ticketRepository.save(ticket);
     }
 
     @Override
-    public PaymentResponse processIosPayment(PaymentRequest paymentRequest) {
+    public PaymentResponse completeIosPayment(PaymentRequest paymentRequest) {
         PaymentResponse paymentResponse = new PaymentResponse();
 
         try {
@@ -128,4 +145,42 @@ public class TicketServiceImpl implements TicketService {
     public List<MyTicketsResponse> getTickets(String username) {
         return ticketRepository.findByUsername(username);
     }
+
+    @Override
+    public boolean validateReceipt(ValidateReceiptRequest validateReceiptRequest) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            URI uri = new URI(validateReceiptUrl);
+            RequestBody requestBody = new RequestBody(validateReceiptRequest.getTransactionReceipt());
+            ResponseEntity<ResponseBody> result = restTemplate.postForEntity(uri, requestBody, ResponseBody.class);
+            ResponseBody responseBody = result.getBody();
+            if (responseBody.getStatus().equals("21007")) {
+                uri = new URI("https://sandbox.itunes.apple.com/verifyReceipt");
+                result = restTemplate.postForEntity(uri, requestBody, ResponseBody.class);
+                responseBody = result.getBody();
+            } else if (responseBody.getStatus().equals("21008")) {
+                uri = new URI("https://buy.itunes.apple.com/verifyReceipt");
+                result = restTemplate.postForEntity(uri, requestBody, ResponseBody.class);
+                responseBody = result.getBody();
+            }
+            for (InApp transaction : responseBody.getReceipt().getInApp()) {
+                if (transaction.getCancellationDate() != null
+                        && transaction.getOriginalTransactionId().equals(validateReceiptRequest.getTransactionId())) {
+                    setTicketStatusRefunded(transaction.getOriginalTransactionId());
+                    return false;
+                }
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private void setTicketStatusRefunded(String transactionId) {
+        logger.info("Finding ticket for transactionId {}", transactionId);
+        ticketRepository.setTicketByAppleTransactionId(transactionId);
+        logger.info("Set ticket status to refunded");
+    }
+
 }
