@@ -25,9 +25,6 @@ public interface TicketService {
 
     PaymentResponse completeIosPayment(PaymentRequest paymentRequest);
 
-    // delete this after UI is live in next update
-    PaymentResponse processIosPayment(PaymentRequest paymentRequest);
-
     List<MyTicketsResponse> getTickets(String username);
 
     boolean validateReceipt(ValidateReceiptRequest validateReceiptRequest);

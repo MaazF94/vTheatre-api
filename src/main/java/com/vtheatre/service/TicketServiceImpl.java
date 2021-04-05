@@ -141,28 +141,6 @@ public class TicketServiceImpl implements TicketService {
         return paymentResponse;
     }
 
-    // delete this after UI is live in next update
-    @Override
-    public PaymentResponse processIosPayment(PaymentRequest paymentRequest) {
-        PaymentResponse paymentResponse = new PaymentResponse();
-
-        try {
-            // Save the ticket
-            createTicket(paymentRequest);
-
-            logger.info("Ticket created for user {} showtime {} and chosen date {}", paymentRequest.getUsername(),
-                    paymentRequest.getShowtime(), paymentRequest.getChosenDate());
-
-            paymentResponse.setConfirmed(true);
-        } catch (Exception e) {
-            paymentResponse.setConfirmed(false);
-            logger.info("Duplicate ticket found for user {} showtime {} and chosen date {}",
-                    paymentRequest.getUsername(), paymentRequest.getShowtime(), paymentRequest.getChosenDate());
-        }
-
-        return paymentResponse;
-    }
-
     @Override
     public List<MyTicketsResponse> getTickets(String username) {
         return ticketRepository.findByUsername(username);

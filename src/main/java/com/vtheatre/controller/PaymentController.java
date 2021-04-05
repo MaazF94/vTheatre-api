@@ -48,16 +48,4 @@ public class PaymentController {
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
-
-    // delete this after UI is live in next update
-    @PostMapping(value = "/completeAndroidPayment")
-    public ResponseEntity<PaymentResponse> completeAndroidPayment(@RequestBody PaymentRequest paymentRequest) {
-        logger.info("Received payment request");
-
-        PaymentResponse paymentResponse = paymentService.processAndroidPayment(paymentRequest);
-
-        logger.info("Sending payment response with result {}", paymentResponse.getConfirmed());
-
-        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
-    }
 }
