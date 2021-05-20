@@ -7,6 +7,7 @@ import com.vtheatre.data.entity.VideoTimeWatched;
 import com.vtheatre.data.model.VideoTimeWatchedRequest;
 import com.vtheatre.service.MovieService;
 import com.vtheatre.util.CloudFrontUtils;
+import com.vtheatre.data.model.TokenLicenseRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,5 +72,16 @@ public class MovieController {
 
         logger.info("files refreshed");
         return new ResponseEntity<>(movie, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/getTokenLicense")
+    public ResponseEntity<String> getTokenLicense(@RequestBody TokenLicenseRequest tokenLicenseRequest) {
+        logger.info("Preparing to retrieve license token");
+
+        String licenseToken = movieService.getTokenLicense(tokenLicenseRequest);
+
+        logger.info("Retrieved license token");
+
+        return new ResponseEntity<>(licenseToken, HttpStatus.OK);
     }
 }
