@@ -31,6 +31,33 @@ public class Movie {
     private String vid;
     private String iosProductId;
     private int active;
+    private int drmEnabled;
+    private String fairplayPlayback;
+    private String widevinePlayback;
+
+    public String getFairplayPlayback() {
+        return fairplayPlayback;
+    }
+
+    public void setFairplayPlayback(String fairplayPlayback) {
+        this.fairplayPlayback = fairplayPlayback;
+    }
+
+    public String getWidevinePlayback() {
+        return widevinePlayback;
+    }
+
+    public void setWidevinePlayback(String widevinePlayback) {
+        this.widevinePlayback = widevinePlayback;
+    }
+
+    public int getDrmEnabled() {
+        return drmEnabled;
+    }
+
+    public void setDrmEnabled(int drmEnabled) {
+        this.drmEnabled = drmEnabled;
+    }
 
     public Long getMovieId() {
         return movieId;
