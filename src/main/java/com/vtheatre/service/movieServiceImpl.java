@@ -16,6 +16,7 @@ import com.vtheatre.config.drm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,6 +29,15 @@ public class MovieServiceImpl implements MovieService {
 
 	@Autowired
 	private VideoTimeWatchedRepository videoTimeWatchedRepository;
+
+	@Value("${drm.pallycon.sitekey}")
+	private String siteKey;
+
+	@Value("${drm.pallycon.accesskey}")
+	private String accessKey;
+
+	@Value("${drm.pallycon.siteid}")
+	private String siteId;
 
 	@Override
 	public List<Movie> lookup() {
@@ -62,13 +72,13 @@ public class MovieServiceImpl implements MovieService {
 			policy = new PallyConDrmTokenPolicy.PolicyBuilder().build();
 
 			if (tokenLicenseRequest.getSourceType().equals("ios")) {
-				token = new PallyConDrmTokenClient().fairplay().siteId(Config.SITE_ID).siteKey(Config.SITE_KEY)
-						.accessKey(Config.ACCESS_KEY).userId(Config.USER_ID).cId(Config.C_ID).policy(policy)
+				token = new PallyConDrmTokenClient().fairplay().siteId(siteId).siteKey(siteKey).accessKey(accessKey)
+						.userId(tokenLicenseRequest.getUserId()).cId(tokenLicenseRequest.getContentId()).policy(policy)
 						.responseFormat(ResponseFormat.ORIGINAL);
 				licenseToken = token.execute();
 			} else if (tokenLicenseRequest.getSourceType().equals("android")) {
-				token = new PallyConDrmTokenClient().widevine().siteId(Config.SITE_ID).siteKey(Config.SITE_KEY)
-						.accessKey(Config.ACCESS_KEY).userId(Config.USER_ID).cId(Config.C_ID).policy(policy)
+				token = new PallyConDrmTokenClient().widevine().siteId(siteId).siteKey(siteKey).accessKey(accessKey)
+						.userId(tokenLicenseRequest.getUserId()).cId(tokenLicenseRequest.getContentId()).policy(policy)
 						.responseFormat(ResponseFormat.ORIGINAL);
 				licenseToken = token.execute();
 			}
